@@ -12,7 +12,12 @@ require('./utils/passportConfig');
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: 'http://localhost:5173', // Set specific frontend URL
+    credentials: true, // Allow credentials (cookies, auth headers, etc.)
+  })
+);
 
 app.use(express.json());
 app.use(cookieParser());
