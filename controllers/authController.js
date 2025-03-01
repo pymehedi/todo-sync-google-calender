@@ -54,6 +54,7 @@ exports.login = catchAsync(async (req, res, next) => {
   res.cookie('email', email, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
+    sameSite: 'None',
   });
 
   const otp = Math.floor(100000 + Math.random() * 900000);
@@ -120,6 +121,7 @@ exports.verify2fa = catchAsync(async (req, res, next) => {
   res.cookie('jwt', jwtToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
+    sameSite: 'None',
   });
 
   res.status(200).json({
