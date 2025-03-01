@@ -13,7 +13,7 @@ require('./utils/passportConfig');
 
 const app = express();
 
-app.set('trust proxy', 1);
+// app.set('trust proxy', 1);
 app.use(
   cors({
     origin: 'https://mehedi-todo-app.netlify.app',
@@ -35,7 +35,6 @@ app.use(
     cookie: {
       secure: process.env.NODE_ENV === 'production',
       httpOnly: true,
-      sameSite: 'None',
     },
   })
 );
