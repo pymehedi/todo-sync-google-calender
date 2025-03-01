@@ -16,7 +16,7 @@ const app = express();
 app.set('trust proxy', 1);
 app.use(
   cors({
-    origin: 'https://mehedi-todo-app.netlify.app/',
+    origin: 'https://mehedi-todo-app.netlify.app',
     credentials: true,
   })
 );
