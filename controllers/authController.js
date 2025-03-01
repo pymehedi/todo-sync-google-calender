@@ -124,7 +124,12 @@ exports.verify2fa = catchAsync(async (req, res, next) => {
 });
 
 exports.logout = (req, res) => {
-  res.clearCookie('jwt');
+  res.clearCookie('jwt', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'None',
+  });
+
   res
     .status(200)
     .json({ status: 'success', message: 'successfully logged out' });
