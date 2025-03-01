@@ -3,6 +3,7 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const passport = require('passport');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -12,10 +13,11 @@ require('./utils/passportConfig');
 
 const app = express();
 
+app.set('trust proxy', 1);
 app.use(
   cors({
-    origin: 'http://localhost:5173', // Set specific frontend URL
-    credentials: true, // Allow credentials (cookies, auth headers, etc.)
+    origin: 'http://localhost:5173',
+    credentials: true,
   })
 );
 
@@ -23,11 +25,17 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   session({
-    secret: 'secret',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: process.env.DATABASE,
+      collectionName: 'sessions',
+    }),
     cookie: {
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
+      sameSite: 'none',
     },
   })
 );

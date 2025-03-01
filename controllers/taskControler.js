@@ -71,8 +71,6 @@ exports.updateTask = catchAsync(async (req, res, next) => {
         eventId: task.googleEventId,
         resource: updatedEvent,
       });
-
-      console.log('Google Calendar Event Updated:', updateCalendar.data);
     } catch (error) {
       console.error(
         'Google Calendar Update Error:',

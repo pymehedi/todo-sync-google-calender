@@ -52,11 +52,9 @@ exports.login = catchAsync(async (req, res, next) => {
     return next(new AppError('Incorrect email or password', 401));
   }
   res.cookie('email', email, {
-    expires: new Date(
-      Date.now() + process.env.JWT_EXPIRES * 24 * 60 * 60 * 1000
-    ),
     httpOnly: true,
-    secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'none',
   });
 
   const otp = Math.floor(100000 + Math.random() * 900000);
@@ -103,6 +101,7 @@ exports.verifyOtp = catchAsync(async (req, res, next) => {
 });
 
 exports.verify2fa = catchAsync(async (req, res, next) => {
+  console.log(req.email);
   const { passkey: token } = req.body;
   const user = await User.findOne({ email: req.email });
   if (!user) {
@@ -120,11 +119,9 @@ exports.verify2fa = catchAsync(async (req, res, next) => {
   const jwtToken = signToken(user.id);
 
   res.cookie('jwt', jwtToken, {
-    expires: new Date(
-      Date.now() + process.env.JWT_EXPIRES * 24 * 60 * 60 * 1000
-    ),
     httpOnly: true,
-    secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'none',
   });
 
   res.status(200).json({
