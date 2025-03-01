@@ -33,7 +33,6 @@ exports.register = catchAsync(async (req, res, next) => {
       status: 'success',
       message: 'user registration successuflly',
       data: {
-        user: newUser,
         qrCode: data_url,
       },
     });
@@ -67,10 +66,7 @@ exports.login = catchAsync(async (req, res, next) => {
     sendEmail(email, otp);
     res.status(200).json({
       status: 'success',
-      data: {
-        user: user,
-        message: 'Please check your email for OTP verification',
-      },
+      message: 'Please check your email for OTP verification',
     });
   } catch (err) {
     console.log(err);
@@ -94,9 +90,6 @@ exports.verifyOtp = catchAsync(async (req, res, next) => {
   await user.save({ validateBeforeSave: false });
   res.status(200).json({
     status: 'success',
-    data: {
-      user: user,
-    },
   });
 });
 
@@ -126,14 +119,15 @@ exports.verify2fa = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: 'success',
-    token: jwtToken,
     message: 'Log in successfully done',
   });
 });
 
 exports.logout = (req, res) => {
   res.clearCookie('jwt');
-  res.status(200).json({ message: 'successfully logged out' });
+  res
+    .status(200)
+    .json({ status: 'success', message: 'successfully logged out' });
 };
 
 exports.protect = catchAsync(async (req, res, next) => {
